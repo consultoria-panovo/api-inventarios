@@ -22,8 +22,7 @@ app.get("/inventarios", async (req, res) => {
     const result = await pool.request().query(`
       SELECT MATNR, WERKS, LGORT
       FROM Inventarios
-      WHERE WERKS = 'PAL4'
-      AND LGORT = 'P024'
+      WHERE LGORT IN ('P101', 'P102', 'P103')
     `);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
