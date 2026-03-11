@@ -14,8 +14,8 @@ const config = {
   }
 };
 
-// Endpoint para leer MM60
-app.get("/inventarios", async (req, res) => {
+// Endpoint para leer Inventarios PAL3
+app.get("/inventarios/pal3", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
@@ -23,6 +23,24 @@ app.get("/inventarios", async (req, res) => {
       SELECT MATNR, WERKS, LGORT
       FROM Inventarios
       WHERE LGORT IN ('P101', 'P102', 'P103')
+    `);
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json(result.recordset);
+  } catch (err) {
+    res.status(500).json({ error: err.toString() });
+  }
+});
+
+// Endpoint para leer Inventarios PAL4
+app.get("/inventarios/pal4", async (req, res) => {
+  try {
+    const pool = await sql.connect(config);
+
+    const result = await pool.request().query(`
+      SELECT MATNR, WERKS, LGORT
+      FROM Inventarios
+      WHERE LGORT IN ('P009', 'P019', 'P001')
     `);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
