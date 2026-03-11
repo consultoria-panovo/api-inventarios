@@ -15,7 +15,7 @@ const config = {
 };
 
 // Endpoint para leer MM60
-app.get("/mm60", async (req, res) => {
+app.get("/inventarios", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
