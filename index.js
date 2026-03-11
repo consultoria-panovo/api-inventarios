@@ -20,7 +20,7 @@ app.get("/inventarios/pal3", async (req, res) => {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT MATNR, WERKS, LGORT
+      SELECT MATNR, WERKS, LGORT, LABST
       FROM Inventarios
       WHERE LGORT IN ('P101', 'P102', 'P103')
     `);
@@ -38,7 +38,7 @@ app.get("/inventarios/pal4", async (req, res) => {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT MATNR, WERKS, LGORT
+      SELECT MATNR, WERKS, LGORT,LABST
       FROM Inventarios
       WHERE LGORT IN ('P009', 'P019', 'P001')
     `);
