@@ -23,6 +23,7 @@ app.get("/inventarios", async (req, res) => {
       SELECT MATNR, WERKS, LGORT
       FROM Inventarios
       WHERE WERKS = 'PAL4'
+      AND LGORT = 'P024'
     `);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
