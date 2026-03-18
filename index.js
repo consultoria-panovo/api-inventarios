@@ -20,9 +20,9 @@ app.get("/inventarios/pal3", async (req, res) => {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT MATNR, WERKS, LGORT, LABST
+      SELECT MATNR, WERKS, LGORT, LABST, FechaDeCreacion
       FROM Inventarios
-      WHERE LGORT IN ('P101', 'P102', 'P103')
+      WHERE LGORT IN ('P101', 'P102', 'P103','P104','P105','P107')
     `);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -38,7 +38,7 @@ app.get("/inventarios/pal4", async (req, res) => {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT MATNR, WERKS, LGORT,LABST
+      SELECT MATNR, WERKS, LGORT,LABST, FechaDeCreacion
       FROM Inventarios
       WHERE LGORT IN ('P009', 'P019', 'P001')
     `);
