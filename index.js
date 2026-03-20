@@ -14,15 +14,31 @@ const config = {
   }
 };
 
-// Endpoint para leer Inventarios PAL3
+// Endpoint para leer Inventarios Limpios PAL3
 app.get("/inventarios/pal3", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT MATNR, WERKS, LGORT, LABST, FechaDeCreacion
-      FROM Inventarios
-      WHERE LGORT IN ('P101', 'P102', 'P103','P104','P105','P107')
+      WITH UltimosInventarios AS (
+          SELECT 
+              MATNR, 
+              WERKS, 
+              LGORT, 
+              LABST, 
+              FechaDeCreacion,
+              ROW_NUMBER() OVER(PARTITION BY MATNR, LGORT ORDER BY FechaDeCreacion DESC) as rn
+          FROM Inventarios
+          WHERE LGORT IN ('P101', 'P102', 'P103','P104','P105','P107')
+      )
+      SELECT 
+          MATNR, 
+          WERKS, 
+          SUM(LABST) as LABST_Total, 
+          MAX(FechaDeCreacion) as UltimaActualizacion
+      FROM UltimosInventarios
+      WHERE rn = 1
+      GROUP BY MATNR, WERKS;
     `);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -32,15 +48,31 @@ app.get("/inventarios/pal3", async (req, res) => {
   }
 });
 
-// Endpoint para leer Inventarios PAL4
+// Endpoint para leer Inventarios Limpios PAL4
 app.get("/inventarios/pal4", async (req, res) => {
   try {
     const pool = await sql.connect(config);
 
     const result = await pool.request().query(`
-      SELECT MATNR, WERKS, LGORT,LABST, FechaDeCreacion
-      FROM Inventarios
-      WHERE LGORT IN ('P009', 'P019', 'P001')
+      WITH UltimosInventarios AS (
+          SELECT 
+              MATNR, 
+              WERKS, 
+              LGORT, 
+              LABST, 
+              FechaDeCreacion,
+              ROW_NUMBER() OVER(PARTITION BY MATNR, LGORT ORDER BY FechaDeCreacion DESC) as rn
+          FROM Inventarios
+          WHERE LGORT IN ('P009', 'P019', 'P001')
+      )
+      SELECT 
+          MATNR, 
+          WERKS, 
+          SUM(LABST) as LABST_Total, 
+          MAX(FechaDeCreacion) as UltimaActualizacion
+      FROM UltimosInventarios
+      WHERE rn = 1
+      GROUP BY MATNR, WERKS;
     `);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -51,5 +83,5 @@ app.get("/inventarios/pal4", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("API Invemtarios corriendo en puerto 3000");
+  console.log("API Inventarios corriendo en puerto 3000 con filtro de última fecha");
 });
