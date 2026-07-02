@@ -29,7 +29,7 @@ app.get("/inventarios/pal3", async (req, res) => {
               FechaDeCreacion,
               ROW_NUMBER() OVER(PARTITION BY MATNR, LGORT ORDER BY FechaDeCreacion DESC) as rn
           FROM Inventarios
-          WHERE LGORT IN ('P101', 'P102', 'P103','P104','P105','P107')
+          WHERE LGORT IN ('P101', 'P102','P104','P105','P107')
       )
       SELECT 
           MATNR, 
